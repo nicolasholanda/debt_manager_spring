@@ -7,25 +7,26 @@ import javax.persistence.Table;
 @Table(name = "address")
 public class Address extends BaseEntity<Integer> {
 
-    private String cep;
     private String city;
     private String street;
     private String number;
+    private String zipCode;
     private String country;
     private String district;
     private Double latitude;
     private Double longitude;
     private String complement;
+    private String referencePoint;
 
     public Address() {
     }
 
-    public Address(String cep, String city, String street, String number, String country, String district, Double latitude, Double longitude, String complement) {
-        this.cep = cep;
+    public Address(String zipCode, String city, String street, String number, String country, String district, Double latitude, Double longitude, String complement) {
         this.city = city;
         this.street = street;
         this.number = number;
         this.country = country;
+        this.zipCode = zipCode;
         this.district = district;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -64,12 +65,12 @@ public class Address extends BaseEntity<Integer> {
         this.district = district;
     }
 
-    public String getCep() {
-        return cep;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public String getCountry() {
