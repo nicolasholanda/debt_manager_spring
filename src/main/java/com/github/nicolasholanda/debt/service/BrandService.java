@@ -4,10 +4,8 @@ import com.github.nicolasholanda.debt.model.Brand;
 import com.github.nicolasholanda.debt.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.persistence.NoResultException;
-
 import java.util.List;
 
 import static java.lang.String.format;

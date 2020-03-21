@@ -1,4 +1,4 @@
-package com.github.nicolasholanda.debt.resource;
+package com.github.nicolasholanda.debt.controller;
 
 import com.github.nicolasholanda.debt.model.Brand;
 import com.github.nicolasholanda.debt.service.BrandService;
@@ -14,12 +14,12 @@ import static org.springframework.http.ResponseEntity.*;
 
 @RestController
 @RequestMapping(value = "/marcas")
-public class BrandResource {
+public class BrandController {
 
     private BrandService service;
 
     @Autowired
-    public BrandResource(BrandService service) {
+    public BrandController(BrandService service) {
         this.service = service;
     }
 

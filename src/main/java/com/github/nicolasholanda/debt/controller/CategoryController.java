@@ -1,4 +1,4 @@
-package com.github.nicolasholanda.debt.resource;
+package com.github.nicolasholanda.debt.controller;
 
 import com.github.nicolasholanda.debt.model.Category;
 import com.github.nicolasholanda.debt.service.CategoryService;
@@ -14,12 +14,12 @@ import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping(value = "/categorias")
-public class CategoryResource {
+public class CategoryController {
 
     private CategoryService service;
 
     @Autowired
-    public CategoryResource(CategoryService service) {
+    public CategoryController(CategoryService service) {
         this.service = service;
     }
 
@@ -29,7 +29,7 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(Category category) {
+    public ResponseEntity<Category> save(@RequestBody Category category) {
         return created(URI.create(format("/categorias/%s", service.save(category).getId()))).build();
     }
 }

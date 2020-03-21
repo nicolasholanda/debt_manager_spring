@@ -1,9 +1,16 @@
 package com.github.nicolasholanda.debt.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "category")
@@ -12,6 +19,10 @@ public class Category extends BaseEntity<Integer> {
     @NotNull(message = "{category.name.notnull}")
     @Size(min = 3, max = 120, message = "{category.name.size}")
     private String name;
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "categories", fetch = LAZY)
+    private List<Product> products = emptyList();
 
     public Category() {
     }
