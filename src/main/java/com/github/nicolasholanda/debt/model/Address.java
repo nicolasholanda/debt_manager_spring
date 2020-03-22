@@ -1,6 +1,10 @@
 package com.github.nicolasholanda.debt.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -8,6 +12,7 @@ import javax.persistence.Table;
 public class Address extends BaseEntity<Integer> {
 
     private String city;
+    private String state;
     private String street;
     private String number;
     private String zipCode;
@@ -18,11 +23,18 @@ public class Address extends BaseEntity<Integer> {
     private String complement;
     private String referencePoint;
 
+    @ManyToOne
+    @JsonBackReference
+    @JoinColumn(name = "user_id")
+    private ApplicationUser user;
+
     public Address() {
     }
 
-    public Address(String zipCode, String city, String street, String number, String country, String district, Double latitude, Double longitude, String complement) {
+    public Address(String zipCode, String city, String state, String street, String number, String country, String district, Double latitude, Double longitude, String complement, String referencePoint, ApplicationUser user) {
         this.city = city;
+        this.user = user;
+        this.state = state;
         this.street = street;
         this.number = number;
         this.country = country;
@@ -31,6 +43,7 @@ public class Address extends BaseEntity<Integer> {
         this.latitude = latitude;
         this.longitude = longitude;
         this.complement = complement;
+        this.referencePoint = referencePoint;
     }
 
     public String getCity() {
@@ -103,5 +116,29 @@ public class Address extends BaseEntity<Integer> {
 
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+
+    public String getReferencePoint() {
+        return referencePoint;
+    }
+
+    public void setReferencePoint(String referencePoint) {
+        this.referencePoint = referencePoint;
+    }
+
+    public ApplicationUser getUser() {
+        return user;
+    }
+
+    public void setUser(ApplicationUser user) {
+        this.user = user;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
