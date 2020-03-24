@@ -33,4 +33,9 @@ public class BrandService {
     public Brand save(Brand brand) {
         return repository.save(brand);
     }
+
+    public void update(Brand brand) {
+        findById(brand.getId());
+        save(brand);
+    }
 }

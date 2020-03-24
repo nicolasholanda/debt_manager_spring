@@ -43,7 +43,7 @@ public class BrandController {
         if(!brand.getId().equals(id)) {
             throw new IllegalArgumentException("O id enviado não corresponde ao id da marca.");
         }
-        service.save(brand);
+        service.update(brand);
         return noContent().build();
     }
 }
