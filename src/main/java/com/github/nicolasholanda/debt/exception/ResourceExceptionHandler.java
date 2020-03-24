@@ -34,4 +34,11 @@ public class ResourceExceptionHandler {
                 new StandardError(BAD_REQUEST.value(), message, System.currentTimeMillis())
         );
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardError> illegalArgument(IllegalArgumentException e, HttpServletRequest request) {
+        return ResponseEntity.status(BAD_REQUEST).body(
+                new StandardError(BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis())
+        );
+    }
 }
