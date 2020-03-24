@@ -1,6 +1,5 @@
 package com.github.nicolasholanda.debt.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -20,7 +19,6 @@ public class Category extends BaseEntity<Integer> {
     @Size(min = 3, max = 120, message = "{category.name.size}")
     private String name;
 
-    @JsonManagedReference
     @ManyToMany(mappedBy = "categories", fetch = LAZY)
     private List<Product> products = emptyList();
 
@@ -33,5 +31,17 @@ public class Category extends BaseEntity<Integer> {
 
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

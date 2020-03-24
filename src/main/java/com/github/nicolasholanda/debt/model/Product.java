@@ -1,6 +1,6 @@
 package com.github.nicolasholanda.debt.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.nicolasholanda.debt.model.enuns.Gender;
 
 import javax.persistence.*;
@@ -9,8 +9,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 
 @Entity
 @Table(name = "product")
@@ -24,7 +27,7 @@ public class Product extends BaseEntity<Integer> {
     @NotNull(message = "{product.brand.notnull}")
     private Brand brand;
 
-    @Min(0)
+    @Min(value = 0, message = "{product.price.min}")
     @NotNull(message = "{product.price.notnull}")
     private BigDecimal price;
 
@@ -32,22 +35,30 @@ public class Product extends BaseEntity<Integer> {
     @NotNull(message = "{product.description.notnull}")
     private String description;
 
+    @JsonIgnore
     @ManyToMany
-    @JsonBackReference
     @JoinTable(
             name = "product_category",
             joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+            inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> categories = emptyList();
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    @NotNull(message = "{product.gender.notnull}")
+    private Integer gender;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<DemandItem> demandItems = emptySet();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<StoreItem> storeItems = emptySet();
 
     public Product() {
     }
 
-    public Product(String name, Brand brand, BigDecimal price, String description, List<Category> categories, Gender gender) {
+    public Product(String name, Brand brand, BigDecimal price, String description, List<Category> categories, Integer gender) {
         this.name = name;
         this.brand = brand;
         this.price = price;
@@ -77,6 +88,43 @@ public class Product extends BaseEntity<Integer> {
     }
 
     public Gender getGender() {
-        return gender;
+        return Gender.of(gender);
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setBrand(Brand brand) {
+        this.brand = brand;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
+    }
+
+    public void setGender(Integer gender) {
+        this.gender = gender;
+    }
+
+    public Set<DemandItem> getDemandItems() {
+        return demandItems;
+    }
+
+    public void setDemandItems(Set<DemandItem> items) {
+        this.demandItems = items;
+    }
+
+    @JsonIgnore
+    public List<Demand> getDemands() {
+        return demandItems.stream().map(DemandItem::getDemand).collect(Collectors.toList());
     }
 }

@@ -3,23 +3,23 @@ package com.github.nicolasholanda.debt.model.enuns;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
 
-public enum Gender {
+public enum PaymentStatus {
 
-    MALE(1, "Masculino"),
-    FEMALE(2, "Feminino"),
-    UNISEX(3, "Unissex");
+    PAID(1, "Quitado"),
+    PENDING(2, "Pendente"),
+    CANCELED(3, "Cancelado");
 
     private Integer code;
     private String description;
 
-    Gender(Integer code, String description) {
+    PaymentStatus(Integer code, String description) {
         this.code = code;
         this.description = description;
     }
 
-    public static Gender of(Integer code) {
+    public static PaymentStatus of(Integer code) {
         return stream(values()).filter(n -> n.getCode().equals(code)).findFirst().orElseThrow(() -> {
-            throw new IllegalArgumentException(format("Não existe o gênero com código %s.", code));
+            throw new IllegalArgumentException(format("Não existe status de pagamento com código %s.", code));
         });
     }
 

@@ -1,27 +1,42 @@
 package com.github.nicolasholanda.debt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.github.nicolasholanda.debt.model.enuns.UserType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "application_user")
-public class ApplicationUser extends BaseEntity<Integer> {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class ApplicationUser extends BaseEntity<Integer> {
 
+    @Size(min = 11, max = 11, message = "{user.cpf.size}")
     private String cpf;
+
+    @NotNull(message = "{user.name.notnull}")
+    @Size(min = 2, max = 200, message = "{user.name.size}")
     private String name;
+
+    @NotNull(message = "{user.email.notnull}")
+    @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\."
+            +"[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@"
+            +"(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?",
+            message="{user.email.pattern}")
     private String email;
+
+    @NotNull(message = "{user.type.notnull}")
     private Integer userType;
 
     @OneToMany(mappedBy = "user")
-    @JsonManagedReference
     private List<Address> addresses;
 
     @ElementCollection
+    @NotNull(message = "{user.phone.notnull}")
     @CollectionTable(name = "phone_number")
     private Set<String> phoneNumbers;
 
