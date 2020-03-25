@@ -1,12 +1,14 @@
 package com.github.nicolasholanda.debt.controller;
 
 import com.github.nicolasholanda.debt.model.Category;
+import com.github.nicolasholanda.debt.model.dto.CategoryDTO;
 import com.github.nicolasholanda.debt.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 import static java.lang.String.format;
 import static org.springframework.http.ResponseEntity.*;
@@ -25,6 +27,11 @@ public class CategoryController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<Category> findById(@PathVariable(value = "id") Integer id) {
         return ok(service.findById(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        return ok(service.findAll());
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.Category;
+import com.github.nicolasholanda.debt.model.dto.CategoryDTO;
 import com.github.nicolasholanda.debt.repository.CategoryRepository;
 import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
@@ -25,6 +29,10 @@ public class CategoryService {
         return repository.findById(id).orElseThrow(() -> {
             throw new NoResultException(format("A categoria de id %s não foi encontrada.", id));
         });
+    }
+
+    public List<CategoryDTO> findAll() {
+        return repository.findAll().stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
     public Category save(Category category) {
