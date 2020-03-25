@@ -1,5 +1,6 @@
 package com.github.nicolasholanda.debt.exception;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -37,6 +38,13 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<StandardError> illegalArgument(IllegalArgumentException e, HttpServletRequest request) {
+        return ResponseEntity.status(BAD_REQUEST).body(
+                new StandardError(BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis())
+        );
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
         return ResponseEntity.status(BAD_REQUEST).body(
                 new StandardError(BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis())
         );

@@ -40,4 +40,10 @@ public class CategoryController {
         service.update(category);
         return noContent().build();
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Category> delete(@PathVariable(value = "id") Integer id) {
+        service.delete(id);
+        return noContent().build();
+    }
 }

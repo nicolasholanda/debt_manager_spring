@@ -2,7 +2,9 @@ package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.Category;
 import com.github.nicolasholanda.debt.repository.CategoryRepository;
+import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -32,6 +34,12 @@ public class CategoryService {
     public void update(Category category) {
         findById(category.getId());
         save(category);
+    }
+
+    public void delete(Integer id) {
+        Try.run(() -> repository.delete(findById(id))).getOrElseThrow(() -> {
+            throw new DataIntegrityViolationException("Não é possível remover uma categoria que possui produtos.");
+        });
     }
 
 }
