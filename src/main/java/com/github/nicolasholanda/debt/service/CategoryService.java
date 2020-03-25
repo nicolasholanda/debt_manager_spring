@@ -6,6 +6,9 @@ import com.github.nicolasholanda.debt.repository.CategoryRepository;
 import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
@@ -23,6 +26,11 @@ public class CategoryService {
     @Autowired
     public CategoryService(CategoryRepository repository) {
         this.repository = repository;
+    }
+
+    public Page<CategoryDTO> findPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
+        var filter = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+        return repository.findAll(filter).map(CategoryDTO::new);
     }
 
     public Category findById(Integer id) {

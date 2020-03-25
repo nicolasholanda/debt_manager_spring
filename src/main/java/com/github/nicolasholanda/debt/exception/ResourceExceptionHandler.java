@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.exception;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +13,7 @@ import javax.validation.ConstraintViolationException;
 
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
@@ -47,6 +49,15 @@ public class ResourceExceptionHandler {
     public ResponseEntity<StandardError> dataIntegrity(DataIntegrityViolationException e, HttpServletRequest request) {
         return ResponseEntity.status(BAD_REQUEST).body(
                 new StandardError(BAD_REQUEST.value(), e.getMessage(), System.currentTimeMillis())
+        );
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<StandardError> propertyReference(PropertyReferenceException e, HttpServletRequest request) {
+        return ResponseEntity.status(BAD_REQUEST).body(
+                new StandardError(BAD_REQUEST.value(),
+                        format("O campo de ordenação %s não existe.", e.getPropertyName()),
+                        System.currentTimeMillis())
         );
     }
 }

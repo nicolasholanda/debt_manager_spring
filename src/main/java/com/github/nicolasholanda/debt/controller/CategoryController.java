@@ -4,6 +4,7 @@ import com.github.nicolasholanda.debt.model.Category;
 import com.github.nicolasholanda.debt.model.dto.CategoryDTO;
 import com.github.nicolasholanda.debt.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +25,20 @@ public class CategoryController {
         this.service = service;
     }
 
+    @GetMapping
+    public ResponseEntity<Page<CategoryDTO>> findPaginated(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                        @RequestParam(value = "order", defaultValue = "name") String orderBy,
+                                                        @RequestParam(value = "direction", defaultValue = "ASC") String direction,
+                                                        @RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage) {
+        return ok(service.findPaginated(page, linesPerPage, direction, orderBy));
+    }
+
     @GetMapping(path = "/{id}")
     public ResponseEntity<Category> findById(@PathVariable(value = "id") Integer id) {
         return ok(service.findById(id));
     }
 
-    @GetMapping
+    @GetMapping(path = "/todos")
     public ResponseEntity<List<CategoryDTO>> findAll() {
         return ok(service.findAll());
     }
