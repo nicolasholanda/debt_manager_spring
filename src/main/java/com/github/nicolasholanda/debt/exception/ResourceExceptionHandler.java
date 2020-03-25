@@ -1,8 +1,10 @@
 package com.github.nicolasholanda.debt.exception;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -58,6 +60,18 @@ public class ResourceExceptionHandler {
                 new StandardError(BAD_REQUEST.value(),
                         format("O campo de ordenação %s não existe.", e.getPropertyName()),
                         System.currentTimeMillis())
+        );
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
+        var message = e.getBindingResult().getFieldErrors()
+                .stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining(" | "));
+
+        return ResponseEntity.status(BAD_REQUEST).body(
+                new StandardError(BAD_REQUEST.value(), message, System.currentTimeMillis())
         );
     }
 }

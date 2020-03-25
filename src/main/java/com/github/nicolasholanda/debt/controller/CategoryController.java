@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -44,16 +45,17 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> save(@RequestBody Category category) {
+    public ResponseEntity<Category> save(@Valid @RequestBody CategoryDTO categoryDTO) {
+        var category = Category.fromDTO(categoryDTO);
         return created(URI.create(format("/categorias/%s", service.save(category).getId()))).build();
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Category> update(@PathVariable(value = "id") Integer id, @RequestBody Category category) {
+    public ResponseEntity<Category> update(@PathVariable(value = "id") Integer id, @Valid @RequestBody CategoryDTO category) {
         if(!category.getId().equals(id)) {
             throw new IllegalArgumentException("O id enviado não corresponde ao id da categoria.");
         }
-        service.update(category);
+        service.update(Category.fromDTO(category));
         return noContent().build();
     }
 
