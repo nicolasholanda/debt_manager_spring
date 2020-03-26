@@ -1,6 +1,5 @@
 package com.github.nicolasholanda.debt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.nicolasholanda.debt.model.enuns.UserType;
 
 import javax.persistence.*;
@@ -8,7 +7,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "application_user")
@@ -35,17 +33,17 @@ public abstract class ApplicationUser extends BaseEntity<Integer> {
     @OneToMany(mappedBy = "user")
     private List<Address> addresses;
 
-    @ElementCollection
-    @NotNull(message = "{user.phone.notnull}")
-    @CollectionTable(name = "phone_number")
-    private Set<String> phoneNumbers;
+    @NotNull(message = "{user.phonenumber.notnull}")
+    @Size(min = 11, max = 11, message = "{user.phonenumber.size}")
+    private String phoneNumber;
 
     public ApplicationUser() {}
 
-    public ApplicationUser(String cpf, String name, String email, UserType userType) {
+    public ApplicationUser(String cpf, String name, String email, String phoneNumber, UserType userType) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
+        this.phoneNumber = phoneNumber;
         this.userType = userType.getCode();
     }
 
@@ -89,11 +87,11 @@ public abstract class ApplicationUser extends BaseEntity<Integer> {
         this.addresses = addresses;
     }
 
-    public Set<String> getPhoneNumbers() {
-        return phoneNumbers;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhoneNumbers(Set<String> phoneNumbers) {
-        this.phoneNumbers = phoneNumbers;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

@@ -46,7 +46,7 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Category> save(@Valid @RequestBody CategoryDTO categoryDTO) {
-        var category = Category.fromDTO(categoryDTO);
+        var category = CategoryDTO.toModel(categoryDTO);
         return created(URI.create(format("/categorias/%s", service.save(category).getId()))).build();
     }
 
@@ -55,7 +55,7 @@ public class CategoryController {
         if(!category.getId().equals(id)) {
             throw new IllegalArgumentException("O id enviado não corresponde ao id da categoria.");
         }
-        service.update(Category.fromDTO(category));
+        service.update(CategoryDTO.toModel(category));
         return noContent().build();
     }
 

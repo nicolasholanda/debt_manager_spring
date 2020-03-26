@@ -20,8 +20,9 @@ public class Customer extends ApplicationUser {
 
     public Customer() {}
 
-    public Customer(String cpf, String name, String email) {
-        super(cpf, name, email, UserType.CUSTOMER);
+    public Customer(Integer id, String cpf, String name, String phoneNumber, String email) {
+        super(cpf, name, email, phoneNumber, UserType.CUSTOMER);
+        this.setId(id);
     }
 
     public List<Demand> getDemands() {

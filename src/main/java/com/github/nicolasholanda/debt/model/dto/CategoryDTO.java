@@ -4,12 +4,8 @@ import com.github.nicolasholanda.debt.model.Category;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
-public class CategoryDTO implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-    private Integer id;
+public class CategoryDTO extends BaseDTO<Integer> {
 
     @NotNull(message = "{category.name.notnull}")
     @Size(min = 3, max = 120, message = "{category.name.size}")
@@ -19,16 +15,8 @@ public class CategoryDTO implements Serializable {
     }
 
     public CategoryDTO(Category category) {
-        this.id = category.getId();
+        super(category.getId());
         this.name = category.getName();
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -37,5 +25,16 @@ public class CategoryDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public static CategoryDTO fromModel(Category category) {
+        return new CategoryDTO(category);
+    }
+
+    public static Category toModel(CategoryDTO dto) {
+        var category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        return category;
     }
 }

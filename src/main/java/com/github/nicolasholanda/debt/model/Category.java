@@ -1,8 +1,5 @@
 package com.github.nicolasholanda.debt.model;
 
-
-import com.github.nicolasholanda.debt.model.dto.CategoryDTO;
-
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -29,13 +26,6 @@ public class Category extends BaseEntity<Integer> {
 
     public Category(String name) {
         this.name = name;
-    }
-
-    public static Category fromDTO(CategoryDTO dto) {
-        var category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        return category;
     }
 
     public String getName() {

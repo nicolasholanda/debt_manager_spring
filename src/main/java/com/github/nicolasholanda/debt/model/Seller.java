@@ -17,8 +17,13 @@ public class Seller extends ApplicationUser {
 
     public Seller() {}
 
-    public Seller(String cpf, String name, String email, Store store) {
-        super(cpf, name, email, UserType.SELLER);
+    public Seller(Integer id, String cpf, String name, String phoneNumber, String email) {
+        super(cpf, name, email, phoneNumber, UserType.SELLER);
+        this.setId(id);
+    }
+
+    public Seller(String cpf, String name, String phoneNumber, String email, Store store) {
+        super(cpf, name, email, phoneNumber, UserType.SELLER);
         this.store = store;
     }
 
