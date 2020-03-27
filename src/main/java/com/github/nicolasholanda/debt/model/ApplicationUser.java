@@ -33,6 +33,15 @@ public abstract class ApplicationUser extends BaseEntity<Integer> {
         this.userType = userType.getCode();
     }
 
+    public ApplicationUser(String cpf, String name, String email, String phoneNumber, UserType userType, List<Address> addresses) {
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.userType = userType.getCode();
+        this.addresses = addresses;
+    }
+
     public String getCpf() {
         return cpf;
     }

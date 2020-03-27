@@ -1,17 +1,22 @@
 package com.github.nicolasholanda.debt.model.dto;
 
+import com.github.nicolasholanda.debt.model.Address;
 import com.github.nicolasholanda.debt.model.ApplicationUser;
 import com.github.nicolasholanda.debt.model.Customer;
 import com.github.nicolasholanda.debt.model.Seller;
+import com.github.nicolasholanda.debt.model.validation.NewUser;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 import static io.vavr.API.*;
 
-public class ApplicationUserDTO extends BaseDTO<Integer> {
+@NewUser
+public class NewUserDTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @CPF(message = "{user.cpf.valid}")
     private String cpf;
@@ -34,24 +39,19 @@ public class ApplicationUserDTO extends BaseDTO<Integer> {
     @Size(min = 11, max = 11, message = "{user.phonenumber.size}")
     private String phoneNumber;
 
-    public ApplicationUserDTO() {}
+    @NotNull(message = "{user.address.notnull}")
+    private Address address;
 
-    public ApplicationUserDTO(Integer id, String cpf, String name, String email, Integer userType, String phoneNumber) {
-        super(id);
+    public NewUserDTO() {
+    }
+
+    public NewUserDTO(String cpf, String name, String email, Integer userType, String phoneNumber, Address address) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.userType = userType;
         this.phoneNumber = phoneNumber;
-    }
-
-    public ApplicationUserDTO(ApplicationUser user) {
-        this.setId(user.getId());
-        this.cpf = user.getCpf();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.phoneNumber = user.getPhoneNumber();
-        this.userType = user.getUserType().getCode();
+        this.address = address;
     }
 
     public String getCpf() {
@@ -94,14 +94,18 @@ public class ApplicationUserDTO extends BaseDTO<Integer> {
         this.phoneNumber = phoneNumber;
     }
 
-    public static ApplicationUserDTO fromModel(ApplicationUser user) {
-        return new ApplicationUserDTO(user);
+    public Address getAddress() {
+        return address;
     }
 
-    public static ApplicationUser toModel(ApplicationUserDTO dto) {
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public static ApplicationUser toModel(NewUserDTO dto) {
         return Match(dto.getUserType()).of(
-                Case($(1), new Seller(dto.getId(), dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail())),
-                Case($(2), new Customer(dto.getId(), dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail())),
+                Case($(1), new Seller(dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getAddress())),
+                Case($(2), new Customer(dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getAddress())),
                 Case($(), e -> {
                     throw new IllegalArgumentException("Tipo de usuário desconhecido.");
                 })

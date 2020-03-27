@@ -25,6 +25,10 @@ public class Customer extends ApplicationUser {
         this.setId(id);
     }
 
+    public Customer(String cpf, String name, String phoneNumber, String email, Address address) {
+        super(cpf, name, email, phoneNumber, UserType.SELLER, List.of(address));
+    }
+
     public List<Demand> getDemands() {
         return demands;
     }

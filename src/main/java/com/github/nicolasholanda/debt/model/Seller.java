@@ -6,6 +6,7 @@ import com.github.nicolasholanda.debt.model.enuns.UserType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Table(name = "seller")
@@ -20,6 +21,10 @@ public class Seller extends ApplicationUser {
     public Seller(Integer id, String cpf, String name, String phoneNumber, String email) {
         super(cpf, name, email, phoneNumber, UserType.SELLER);
         this.setId(id);
+    }
+
+    public Seller(String cpf, String name, String phoneNumber, String email, Address address) {
+        super(cpf, name, email, phoneNumber, UserType.SELLER, List.of(address));
     }
 
     public Seller(String cpf, String name, String phoneNumber, String email, Store store) {

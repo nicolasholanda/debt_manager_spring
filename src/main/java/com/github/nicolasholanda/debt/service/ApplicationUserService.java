@@ -1,7 +1,7 @@
 package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.ApplicationUser;
-import com.github.nicolasholanda.debt.model.dto.ApplicationUserDTO;
+import com.github.nicolasholanda.debt.model.dto.ExistentUserDTO;
 import com.github.nicolasholanda.debt.repository.ApplicationUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,13 +32,13 @@ public class ApplicationUserService {
         });
     }
 
-    public Page<ApplicationUserDTO> findPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
+    public Page<ExistentUserDTO> findPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
         var filter = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-        return repository.findAll(filter).map(ApplicationUserDTO::new);
+        return repository.findAll(filter).map(ExistentUserDTO::new);
     }
 
-    public List<ApplicationUserDTO> findAll() {
-        return repository.findAll().stream().map(ApplicationUserDTO::new).collect(Collectors.toList());
+    public List<ExistentUserDTO> findAll() {
+        return repository.findAll().stream().map(ExistentUserDTO::new).collect(Collectors.toList());
     }
 
     public ApplicationUser save(ApplicationUser user) {
