@@ -14,8 +14,6 @@ import static javax.persistence.FetchType.LAZY;
 @Table(name = "category")
 public class Category extends BaseEntity<Integer> {
 
-    @NotNull(message = "{category.name.notnull}")
-    @Size(min = 3, max = 120, message = "{category.name.size}")
     private String name;
 
     @ManyToMany(mappedBy = "categories", fetch = LAZY)
