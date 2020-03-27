@@ -48,8 +48,8 @@ public class CategoryService {
     }
 
     public void update(Category category) {
-        findById(category.getId());
-        save(category);
+        var oldCategory = findById(category.getId());
+        save(updateData(oldCategory, category));
     }
 
     public void delete(Integer id) {
@@ -58,4 +58,8 @@ public class CategoryService {
         });
     }
 
+    private Category updateData(Category oldCategory, Category newCategory) {
+        oldCategory.setName(newCategory.getName());
+        return oldCategory;
+    }
 }

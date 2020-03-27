@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.Brand;
+import com.github.nicolasholanda.debt.model.Category;
 import com.github.nicolasholanda.debt.repository.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,13 @@ public class BrandService {
     }
 
     public void update(Brand brand) {
-        findById(brand.getId());
-        save(brand);
+        var oldBrand = findById(brand.getId());
+        save(updateData(oldBrand, brand));
+    }
+
+    private Brand updateData(Brand oldBrand, Brand newBrand) {
+        oldBrand.setName(newBrand.getName());
+        oldBrand.setDescription(newBrand.getDescription());
+        return oldBrand;
     }
 }
