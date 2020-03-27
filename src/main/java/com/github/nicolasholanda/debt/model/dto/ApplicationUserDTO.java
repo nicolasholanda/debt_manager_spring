@@ -3,6 +3,7 @@ package com.github.nicolasholanda.debt.model.dto;
 import com.github.nicolasholanda.debt.model.ApplicationUser;
 import com.github.nicolasholanda.debt.model.Customer;
 import com.github.nicolasholanda.debt.model.Seller;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -12,7 +13,7 @@ import static io.vavr.API.*;
 
 public class ApplicationUserDTO extends BaseDTO<Integer> {
 
-    @Size(min = 11, max = 11, message = "{user.cpf.size}")
+    @CPF(message = "{user.cpf.valid}")
     private String cpf;
 
     @NotNull(message = "{user.name.notnull}")
