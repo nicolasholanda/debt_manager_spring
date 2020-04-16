@@ -1,9 +1,6 @@
 package com.github.nicolasholanda.debt.model.dto;
 
 import com.github.nicolasholanda.debt.model.Address;
-import com.github.nicolasholanda.debt.model.ApplicationUser;
-import com.github.nicolasholanda.debt.model.Customer;
-import com.github.nicolasholanda.debt.model.Seller;
 import com.github.nicolasholanda.debt.model.validation.NewUser;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -11,8 +8,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-
-import static io.vavr.API.*;
 
 @NewUser
 public class NewUserDTO implements Serializable {
@@ -100,15 +95,5 @@ public class NewUserDTO implements Serializable {
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public static ApplicationUser toModel(NewUserDTO dto) {
-        return Match(dto.getUserType()).of(
-                Case($(1), new Seller(dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getAddress())),
-                Case($(2), new Customer(dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail(), dto.getAddress())),
-                Case($(), e -> {
-                    throw new IllegalArgumentException("Tipo de usuário desconhecido.");
-                })
-        );
     }
 }

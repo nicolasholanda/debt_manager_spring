@@ -3,8 +3,6 @@ package com.github.nicolasholanda.debt.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,14 +16,15 @@ public class Store extends BaseEntity<Integer> {
 
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "owner_id")
-    @NotNull(message = "{store.owner.notnull}")
     private Seller owner;
 
-    @Size(min = 1, max = 100)
-    @NotNull(message = "{store.name.notnull}")
     private String name;
 
     private BigDecimal ratingAverage;
+
+    @ManyToOne
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @OneToMany(mappedBy = "store")
     private List<Rating> ratingList;
@@ -37,10 +36,19 @@ public class Store extends BaseEntity<Integer> {
     @OneToMany(mappedBy = "store")
     private List<Demand> demands;
 
-    public Store(Seller owner, String name, BigDecimal ratingAverage) {
+    @ManyToMany
+    @JoinTable(
+            name = "store_brand",
+            joinColumns = @JoinColumn(name = "store_id"),
+            inverseJoinColumns = @JoinColumn(name = "brand_id")
+    )
+    private List<Brand> brands;
+
+    public Store(Seller owner, String name, BigDecimal ratingAverage, Address address) {
         this.owner = owner;
         this.name = name;
         this.ratingAverage = ratingAverage;
+        this.address = address;
     }
 
     public Store() {
@@ -92,5 +100,21 @@ public class Store extends BaseEntity<Integer> {
 
     public void setDemands(List<Demand> demands) {
         this.demands = demands;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public List<Brand> getBrands() {
+        return brands;
+    }
+
+    public void setBrands(List<Brand> brands) {
+        this.brands = brands;
     }
 }

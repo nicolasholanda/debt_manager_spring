@@ -27,9 +27,8 @@ public class Seller extends ApplicationUser {
         super(cpf, name, email, phoneNumber, UserType.SELLER, List.of(address));
     }
 
-    public Seller(String cpf, String name, String phoneNumber, String email, Store store) {
-        super(cpf, name, email, phoneNumber, UserType.SELLER);
-        this.store = store;
+    public Seller(ApplicationUser user) {
+        super(user.getCpf(), user.getName(), user.getEmail(), user.getPhoneNumber(), UserType.SELLER);
     }
 
     public Store getStore() {

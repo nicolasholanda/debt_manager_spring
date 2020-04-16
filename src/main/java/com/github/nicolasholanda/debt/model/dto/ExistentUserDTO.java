@@ -1,16 +1,12 @@
 package com.github.nicolasholanda.debt.model.dto;
 
 import com.github.nicolasholanda.debt.model.ApplicationUser;
-import com.github.nicolasholanda.debt.model.Customer;
-import com.github.nicolasholanda.debt.model.Seller;
 import com.github.nicolasholanda.debt.model.validation.ExistentUser;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-import static io.vavr.API.*;
 
 @ExistentUser
 public class ExistentUserDTO extends BaseDTO<Integer> {
@@ -96,17 +92,4 @@ public class ExistentUserDTO extends BaseDTO<Integer> {
         this.phoneNumber = phoneNumber;
     }
 
-    public static ExistentUserDTO fromModel(ApplicationUser user) {
-        return new ExistentUserDTO(user);
-    }
-
-    public static ApplicationUser toModel(ExistentUserDTO dto) {
-        return Match(dto.getUserType()).of(
-                Case($(1), new Seller(dto.getId(), dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail())),
-                Case($(2), new Customer(dto.getId(), dto.getCpf(), dto.getName(), dto.getPhoneNumber(), dto.getEmail())),
-                Case($(), e -> {
-                    throw new IllegalArgumentException("Tipo de usuário desconhecido.");
-                })
-        );
-    }
 }

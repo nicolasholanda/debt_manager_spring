@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
+import javax.validation.Valid;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,7 +31,7 @@ public class CategoryService {
 
     public Page<CategoryDTO> findPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
         var filter = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-        return repository.findAll(filter).map(CategoryDTO::new);
+        return repository.findAll(filter).map(this::toDTO);
     }
 
     public Category findById(Integer id) {
@@ -40,16 +41,16 @@ public class CategoryService {
     }
 
     public List<CategoryDTO> findAll() {
-        return repository.findAll().stream().map(CategoryDTO::new).collect(Collectors.toList());
+        return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
     }
 
-    public Category save(Category category) {
-        return repository.save(category);
+    public Category save(CategoryDTO dto) {
+        return repository.save(toModel(dto));
     }
 
-    public void update(Category category) {
+    public void update(@Valid CategoryDTO category) {
         var oldCategory = findById(category.getId());
-        save(updateData(oldCategory, category));
+        repository.save(updateData(oldCategory, toModel(category)));
     }
 
     public void delete(Integer id) {
@@ -61,5 +62,16 @@ public class CategoryService {
     private Category updateData(Category oldCategory, Category newCategory) {
         oldCategory.setName(newCategory.getName());
         return oldCategory;
+    }
+
+    public Category toModel(CategoryDTO dto) {
+        var category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        return category;
+    }
+
+    public CategoryDTO toDTO(Category category) {
+        return new CategoryDTO(category.getId(), category.getName());
     }
 }

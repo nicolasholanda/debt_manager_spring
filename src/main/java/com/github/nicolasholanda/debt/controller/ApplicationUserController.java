@@ -49,8 +49,7 @@ public class ApplicationUserController {
 
     @PostMapping
     public ResponseEntity<ApplicationUser> save(@Valid @RequestBody NewUserDTO userDTO) {
-        var user = NewUserDTO.toModel(userDTO);
-        return created(URI.create(format("/usuarios/%s", service.save(user).getId()))).build();
+        return created(URI.create(format("/usuarios/%s", service.save(userDTO).getId()))).build();
     }
 
     @PutMapping(path = "/{id}")
@@ -59,7 +58,7 @@ public class ApplicationUserController {
         if(!userDTO.getId().equals(id)) {
             throw new IllegalArgumentException("O id enviado não corresponde ao id do usuário.");
         }
-        service.update(ExistentUserDTO.toModel(userDTO));
+        service.update(userDTO);
         return noContent().build();
     }
 }

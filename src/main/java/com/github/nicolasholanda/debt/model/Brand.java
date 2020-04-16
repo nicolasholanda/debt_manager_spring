@@ -26,6 +26,10 @@ public class Brand extends BaseEntity<Integer> {
     @OneToMany(mappedBy = "brand", fetch = LAZY)
     private List<Product> products = emptyList();
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "brands", fetch = LAZY)
+    private List<Store> stores = emptyList();
+
     public String getName() {
         return name;
     }
@@ -44,5 +48,9 @@ public class Brand extends BaseEntity<Integer> {
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public List<Store> getStores() {
+        return stores;
     }
 }
