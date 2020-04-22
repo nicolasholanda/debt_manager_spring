@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.github.nicolasholanda.debt.model.enuns.DemandStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,10 +19,9 @@ public class Demand extends BaseEntity<Integer> {
     private Date shipDate;
 
     @NotNull(message = "{demand.requestdate.notnull}")
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
+
     private Date requestDate;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm")
     private Date shippedDate;
 
     @ManyToOne
@@ -46,6 +46,8 @@ public class Demand extends BaseEntity<Integer> {
     @OneToMany(mappedBy = "id.demand")
     @NotNull(message = "{demand.items.notnull}")
     private Set<DemandItem> items = emptySet();
+
+    private Integer status;
 
     public Demand(){}
 
@@ -120,5 +122,13 @@ public class Demand extends BaseEntity<Integer> {
 
     public void setItems(Set<DemandItem> items) {
         this.items = items;
+    }
+
+    public DemandStatus getStatus() {
+        return DemandStatus.of(status);
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

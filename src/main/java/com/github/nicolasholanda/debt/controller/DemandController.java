@@ -1,6 +1,6 @@
 package com.github.nicolasholanda.debt.controller;
 
-import com.github.nicolasholanda.debt.model.Demand;
+import com.github.nicolasholanda.debt.model.dto.ExistentDemandDTO;
 import com.github.nicolasholanda.debt.service.DemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ public class DemandController {
     }
 
     @GetMapping(path = "/{id}")
-    public ResponseEntity<Demand> findById(@PathVariable(value = "id") Integer id) {
+    public ResponseEntity<ExistentDemandDTO> findById(@PathVariable(value = "id") Integer id) {
         return ok(service.findById(id));
     }
 }
