@@ -2,6 +2,7 @@ package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.Category;
 import com.github.nicolasholanda.debt.model.dto.CategoryDTO;
+import com.github.nicolasholanda.debt.model.mapper.CategoryMapper;
 import com.github.nicolasholanda.debt.repository.CategoryRepository;
 import io.vavr.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +23,18 @@ import static java.lang.String.format;
 @Service
 public class CategoryService {
 
+    private CategoryMapper mapper;
     private CategoryRepository repository;
 
     @Autowired
-    public CategoryService(CategoryRepository repository) {
+    public CategoryService(CategoryMapper mapper, CategoryRepository repository) {
+        this.mapper = mapper;
         this.repository = repository;
     }
 
     public Page<CategoryDTO> findPaginated(Integer page, Integer linesPerPage, String direction, String orderBy) {
         var filter = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
-        return repository.findAll(filter).map(this::toDTO);
+        return repository.findAll(filter).map(mapper::toDTO);
     }
 
     public Category findById(Integer id) {
@@ -41,16 +44,16 @@ public class CategoryService {
     }
 
     public List<CategoryDTO> findAll() {
-        return repository.findAll().stream().map(this::toDTO).collect(Collectors.toList());
+        return repository.findAll().stream().map(mapper::toDTO).collect(Collectors.toList());
     }
 
     public Category save(CategoryDTO dto) {
-        return repository.save(toModel(dto));
+        return repository.save(mapper.toModel(dto));
     }
 
     public void update(@Valid CategoryDTO category) {
         var oldCategory = findById(category.getId());
-        repository.save(updateData(oldCategory, toModel(category)));
+        repository.save(updateData(oldCategory, mapper.toModel(category)));
     }
 
     public void delete(Integer id) {
@@ -62,16 +65,5 @@ public class CategoryService {
     private Category updateData(Category oldCategory, Category newCategory) {
         oldCategory.setName(newCategory.getName());
         return oldCategory;
-    }
-
-    public Category toModel(CategoryDTO dto) {
-        var category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        return category;
-    }
-
-    public CategoryDTO toDTO(Category category) {
-        return new CategoryDTO(category.getId(), category.getName());
     }
 }

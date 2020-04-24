@@ -9,6 +9,8 @@ public class CategoryDTO extends BaseDTO<Integer> {
     @Size(min = 3, max = 120, message = "{category.name.size}")
     private String name;
 
+    public CategoryDTO() {}
+
     public CategoryDTO(Integer id, String name) {
         super(id);
         this.name = name;
