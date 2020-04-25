@@ -34,19 +34,15 @@ public class NewUserDTO implements Serializable {
     @Size(min = 11, max = 11, message = "{user.phonenumber.size}")
     private String phoneNumber;
 
-    @NotNull(message = "{user.address.notnull}")
-    private Address address;
-
     public NewUserDTO() {
     }
 
-    public NewUserDTO(String cpf, String name, String email, Integer userType, String phoneNumber, Address address) {
+    public NewUserDTO(String cpf, String name, String email, Integer userType, String phoneNumber) {
         this.cpf = cpf;
         this.name = name;
         this.email = email;
         this.userType = userType;
         this.phoneNumber = phoneNumber;
-        this.address = address;
     }
 
     public String getCpf() {
@@ -87,13 +83,5 @@ public class NewUserDTO implements Serializable {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
     }
 }
