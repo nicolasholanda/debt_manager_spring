@@ -25,6 +25,16 @@ public abstract class ApplicationUser extends BaseEntity<Integer> {
 
     public ApplicationUser() {}
 
+    public ApplicationUser(Integer id, String cpf, String name, String email, String phoneNumber, UserType userType, List<Address> addresses) {
+        this.setId(id);
+        this.cpf = cpf;
+        this.name = name;
+        this.email = email;
+        this.addresses = addresses;
+        this.phoneNumber = phoneNumber;
+        this.userType = userType.getCode();
+    }
+
     public ApplicationUser(String cpf, String name, String email, String phoneNumber, UserType userType) {
         this.cpf = cpf;
         this.name = name;

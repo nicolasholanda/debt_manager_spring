@@ -1,26 +1,24 @@
 package com.github.nicolasholanda.debt.service;
 
-import com.github.nicolasholanda.debt.model.Seller;
 import com.github.nicolasholanda.debt.model.Store;
 import com.github.nicolasholanda.debt.model.dto.NewStoreDTO;
 import com.github.nicolasholanda.debt.model.dto.StoreListItemDTO;
+import com.github.nicolasholanda.debt.model.mapper.NewStoreMapper;
+import com.github.nicolasholanda.debt.model.mapper.StoreListItemMapper;
 import com.github.nicolasholanda.debt.repository.StoreRepository;
 import com.github.nicolasholanda.debt.utils.AddressUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.NoResultException;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static com.github.nicolasholanda.debt.model.enuns.UserType.SELLER;
+import static com.github.nicolasholanda.debt.utils.ServiceUtils.filterByRadius;
+import static com.github.nicolasholanda.debt.utils.ServiceUtils.orderByDistance;
 import static java.lang.String.format;
 
 @Service
@@ -28,13 +26,15 @@ public class StoreService {
 
     private StoreRepository repository;
     private AddressService addressService;
-    private ApplicationUserService userService;
+    private NewStoreMapper newStoreMapper;
+    private StoreListItemMapper storeListItemMapper;
 
     @Autowired
-    public StoreService(StoreRepository repository, AddressService addressService, ApplicationUserService userRepository) {
+    public StoreService(StoreRepository repository, AddressService addressService, NewStoreMapper newStoreMapper, StoreListItemMapper storeListItemMapper) {
         this.repository = repository;
-        this.userService = userRepository;
         this.addressService = addressService;
+        this.newStoreMapper = newStoreMapper;
+        this.storeListItemMapper = storeListItemMapper;
     }
 
     public Store findById(Integer id) {
@@ -43,15 +43,15 @@ public class StoreService {
         });
     }
 
-    public Store save(NewStoreDTO store) {
-        return repository.save(toModel(store));
+    public Store save(NewStoreDTO dto) {
+        return repository.save(newStoreMapper.toModel(dto));
     }
 
     public Page<StoreListItemDTO> findAllWithDistance(PageRequest filter, String query, Integer addressId,
                                                       List<Integer> brandList) {
+        var deliveryAddress = addressService.findById(addressId);
         return repository.findPaginated(query, brandList, filter).map(s -> {
-            var dto = fromModel(s);
-            var deliveryAddress = addressService.findById(addressId);
+            var dto = storeListItemMapper.toDTO(s);
             dto.setDistance(AddressUtils.distanceInKm(s.getAddress(), deliveryAddress));
             return dto;
         });
@@ -65,45 +65,5 @@ public class StoreService {
         }
         var filter = PageRequest.of(page, linesPerPage, Sort.Direction.valueOf(direction), orderBy);
         return filterByRadius(findAllWithDistance(filter, query, addressId, brandList), radius);
-    }
-
-    private Page<StoreListItemDTO> orderByDistance(Page<StoreListItemDTO> page, String direction) {
-        var listResult = new ArrayList<>(page.toList());
-        Collections.sort(listResult);
-        if (direction.equals("DESC")) {
-            Collections.reverse(listResult);
-        }
-        return listToPage(listResult, page);
-    }
-
-    private Page<StoreListItemDTO> filterByRadius(Page<StoreListItemDTO> page, Integer radius) {
-        var listResult = new ArrayList<>(page.toList()).stream().filter(s -> s.getDistance().intValue() <= radius).collect(Collectors.toList());
-        return listToPage(listResult, page);
-    }
-
-    private Page<StoreListItemDTO> listToPage(List<StoreListItemDTO> list, Page<StoreListItemDTO> page) {
-        var pageable = page.getPageable();
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), list.size());
-        return new PageImpl<>(list.subList(start, end), pageable, list.size());
-    }
-
-    public StoreListItemDTO fromModel(Store store) {
-        return new StoreListItemDTO(store);
-    }
-
-    public Store toModel(NewStoreDTO dto) {
-        var user = userService.findById(dto.getOwnerId());
-        if(!user.getUserType().equals(SELLER)) {
-            throw new IllegalArgumentException("O dono da loja deve ser um usuário vendedor.");
-        } else if(!dto.getAddress().getUser().getId().equals(dto.getOwnerId())) {
-            throw new IllegalArgumentException("O endereço da loja deve ter sido cadastrado pelo vendedor.");
-        }
-        var store = new Store();
-        store.setName(dto.getName());
-        store.setOwner(new Seller(user));
-        store.setAddress(dto.getAddress());
-        store.setBrands(dto.getBrands());
-        return store;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.nicolasholanda.debt.utils.AddressUtils;
 
 import javax.persistence.*;
 
@@ -116,5 +117,9 @@ public class Store extends BaseEntity<Integer> {
 
     public void setBrands(List<Brand> brands) {
         this.brands = brands;
+    }
+
+    public BigDecimal getDistance(Address address) {
+        return AddressUtils.distanceInKm(this.address, address);
     }
 }

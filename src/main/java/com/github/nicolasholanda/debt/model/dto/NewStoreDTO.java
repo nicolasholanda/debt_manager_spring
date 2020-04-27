@@ -1,6 +1,5 @@
 package com.github.nicolasholanda.debt.model.dto;
 
-import com.github.nicolasholanda.debt.model.Address;
 import com.github.nicolasholanda.debt.model.Brand;
 
 import javax.validation.constraints.NotEmpty;
@@ -20,16 +19,16 @@ public class NewStoreDTO implements Serializable {
     private String name;
 
     @NotNull(message = "{store.address.notnull}")
-    private Address address;
+    private Integer addressId;
 
     @NotEmpty(message = "{store.brands.notempty}")
     @NotNull(message = "{store.brands.notnull}")
     private List<Brand> brands;
 
-    public NewStoreDTO(Integer owner, String name, Address address, List<Brand> brands) {
+    public NewStoreDTO(Integer owner, String name, Integer addressId, List<Brand> brands) {
         this.name = name;
         this.ownerId = owner;
-        this.address = address;
+        this.addressId = addressId;
         this.brands = brands;
     }
 
@@ -49,12 +48,12 @@ public class NewStoreDTO implements Serializable {
         this.name = name;
     }
 
-    public Address getAddress() {
-        return address;
+    public Integer getAddressId() {
+        return addressId;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setAddressId(Integer addressId) {
+        this.addressId = addressId;
     }
 
     public List<Brand> getBrands() {
