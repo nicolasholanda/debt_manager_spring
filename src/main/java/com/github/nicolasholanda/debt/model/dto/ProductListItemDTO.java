@@ -1,7 +1,5 @@
 package com.github.nicolasholanda.debt.model.dto;
 
-import com.github.nicolasholanda.debt.model.Product;
-
 import java.math.BigDecimal;
 
 public class ProductListItemDTO extends BaseDTO<Integer> {
@@ -10,12 +8,7 @@ public class ProductListItemDTO extends BaseDTO<Integer> {
     private String brand;
     private BigDecimal price;
 
-    public ProductListItemDTO(Product product) {
-        super(product.getId());
-        this.name = product.getName();
-        this.price = product.getPrice();
-        this.brand = product.getBrand().getName();
-    }
+    public ProductListItemDTO() {}
 
     public String getName() {
         return name;
