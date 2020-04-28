@@ -23,7 +23,7 @@ public class ExistentDemandDTO extends BaseDTO<Integer> {
 
     private Address shipAddress;
 
-    private List<Payment> payments;
+    private Payment payment;
 
     private Integer status;
 
@@ -34,7 +34,7 @@ public class ExistentDemandDTO extends BaseDTO<Integer> {
         this.shippedDate = demand.getShippedDate();
         this.requestDate = demand.getRequestDate();
         this.shipAddress = demand.getShipAddress();
-        this.payments = demand.getPayments();
+        this.payment = demand.getPayment();
         this.status = demand.getStatus().getCode();
         this.items = demand.getItems().stream().map(DemandItemDTO::new).collect(Collectors.toSet());
     }
@@ -87,12 +87,12 @@ public class ExistentDemandDTO extends BaseDTO<Integer> {
         this.shipAddress = shipAddress;
     }
 
-    public List<Payment> getPayments() {
-        return payments;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Integer getStatus() {

@@ -1,54 +1,52 @@
 package com.github.nicolasholanda.debt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.nicolasholanda.debt.model.enuns.PaymentStatus;
+import com.github.nicolasholanda.debt.model.enuns.PaymentType;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.math.BigDecimal;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Payment extends BaseEntity<Integer> {
 
-    @Min(value = 0, message = "{payment.value.min")
-    @NotNull(message = "{payment.value.notnull}")
-    private BigDecimal value;
-
-    @NotNull(message = "{payment.status.notnull}")
-    private Integer status;
-
-    @ManyToOne
+    @OneToOne
     @JsonIgnore
     @JoinColumn(name = "demand_id")
     private Demand demand;
 
+    private Integer paymentType;
+
+    private Integer numberOfInstallments;
+
     public Payment() {}
 
-    public Payment(PaymentStatus status, BigDecimal value, Demand demand) {
-        this.status = status.getCode();
-        this.value = value;
+    public Payment(Demand demand, Integer paymentType, Integer numberOfInstallments) {
         this.demand = demand;
-    }
-
-    public PaymentStatus getStatus() {
-        return PaymentStatus.of(status);
-    }
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status.getCode();
-    }
-
-    public BigDecimal getValue() {
-        return value;
-    }
-
-    public void setValue(BigDecimal value) {
-        this.value = value;
+        this.paymentType = paymentType;
+        this.numberOfInstallments = numberOfInstallments;
     }
 
     public Demand getDemand() {
         return demand;
+    }
+
+    public void setDemand(Demand demand) {
+        this.demand = demand;
+    }
+
+    public void setPaymentType(Integer paymentType) {
+        this.paymentType = paymentType;
+    }
+
+    public PaymentType getPaymentType() {
+        return PaymentType.of(paymentType);
+    }
+
+    public Integer getNumberOfInstallments() {
+        return numberOfInstallments;
+    }
+
+    public void setNumberOfInstallments(Integer numberOfInstallments) {
+        this.numberOfInstallments = numberOfInstallments;
     }
 }

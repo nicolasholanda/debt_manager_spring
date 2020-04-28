@@ -39,9 +39,9 @@ public class Demand extends BaseEntity<Integer> {
     @NotNull(message = "{demand.store.notnull}")
     private Store store;
 
-    @OneToMany(mappedBy = "demand")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "demand")
     @NotNull(message = "{demand.payments.notnull}")
-    private List<Payment> payments;
+    private Payment payment;
 
     @OneToMany(mappedBy = "id.demand")
     @NotNull(message = "{demand.items.notnull}")
@@ -108,12 +108,12 @@ public class Demand extends BaseEntity<Integer> {
         this.customer = customer;
     }
 
-    public List<Payment> getPayments() {
-        return payments;
+    public Payment getPayment() {
+        return payment;
     }
 
-    public void setPayments(List<Payment> payments) {
-        this.payments = payments;
+    public void setPayment(Payment payment) {
+        this.payment = payment;
     }
 
     public Set<DemandItem> getItems() {
