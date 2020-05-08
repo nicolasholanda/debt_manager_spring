@@ -1,12 +1,22 @@
 package com.github.nicolasholanda.debt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.github.nicolasholanda.debt.model.enuns.PaymentStatus;
 import com.github.nicolasholanda.debt.model.enuns.PaymentType;
 
 import javax.persistence.*;
 
+import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "paymentType", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = CashPayment.class, name = "1")
+})
 public abstract class Payment extends BaseEntity<Integer> {
 
     @OneToOne
@@ -16,14 +26,15 @@ public abstract class Payment extends BaseEntity<Integer> {
 
     private Integer paymentType;
 
-    private Integer numberOfInstallments;
+    @JsonProperty(access = READ_ONLY)
+    private Integer status;
 
     public Payment() {}
 
-    public Payment(Demand demand, Integer paymentType, Integer numberOfInstallments) {
+    public Payment(Demand demand, PaymentType paymentType, PaymentStatus status) {
         this.demand = demand;
-        this.paymentType = paymentType;
-        this.numberOfInstallments = numberOfInstallments;
+        this.paymentType = paymentType.getCode();
+        this.status = status.getCode();
     }
 
     public Demand getDemand() {
@@ -42,11 +53,11 @@ public abstract class Payment extends BaseEntity<Integer> {
         return PaymentType.of(paymentType);
     }
 
-    public Integer getNumberOfInstallments() {
-        return numberOfInstallments;
+    public PaymentStatus getStatus() {
+        return PaymentStatus.of(status);
     }
 
-    public void setNumberOfInstallments(Integer numberOfInstallments) {
-        this.numberOfInstallments = numberOfInstallments;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

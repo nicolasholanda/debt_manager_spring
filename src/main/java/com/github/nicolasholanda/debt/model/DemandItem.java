@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -20,12 +18,8 @@ public class DemandItem implements Serializable {
     @JsonIgnore
     private DemandItemPK id = new DemandItemPK();
 
-    @Min(value = 1, message = "{demanditem.quantity.min}")
-    @NotNull(message = "{demanditem.quantity.notnull}")
     private Integer quantity;
 
-    @Min(value = 0, message = "{demanditem.discount.min}")
-    @NotNull(message = "{demanditem.discount.notnull}")
     private BigDecimal discount;
 
     private BigDecimal price;
@@ -33,9 +27,14 @@ public class DemandItem implements Serializable {
     public DemandItem() {
     }
 
-    public DemandItem(Product product, Demand demand, Integer quantity, BigDecimal discount, BigDecimal price) {
+    public DemandItem(Product product, Demand demand, Integer quantity, BigDecimal discount) {
         id.setDemand(demand);
         id.setProduct(product);
+        this.quantity = quantity;
+        this.discount = discount;
+        this.price = product.getPrice().multiply(BigDecimal.valueOf(quantity)).subtract(discount);
+    }
+    public DemandItem(Integer quantity, BigDecimal discount, BigDecimal price) {
         this.quantity = quantity;
         this.discount = discount;
         this.price = price;

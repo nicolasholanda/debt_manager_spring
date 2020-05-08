@@ -4,13 +4,13 @@ import com.github.nicolasholanda.debt.model.DemandItem;
 
 import java.math.BigDecimal;
 
-public class DemandItemDTO {
+public class ExistentDemandItemDTO {
     private Integer quantity;
     private BigDecimal price;
     private BigDecimal discount;
     private String productName;
 
-    public DemandItemDTO(DemandItem item) {
+    public ExistentDemandItemDTO(DemandItem item) {
         this.quantity = item.getQuantity();
         this.discount = item.getDiscount();
         this.productName = item.getProduct().getName();
