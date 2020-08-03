@@ -15,7 +15,8 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.READ_ONLY;
 @Inheritance(strategy = InheritanceType.JOINED)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "paymentType", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = CashPayment.class, name = "1")
+        @JsonSubTypes.Type(value = CashPayment.class, name = PaymentType.Constants.CASH_CODE),
+        @JsonSubTypes.Type(value = CreditPayment.class, name = PaymentType.Constants.CREDIT_CODE)
 })
 public abstract class Payment extends BaseEntity<Integer> {
 

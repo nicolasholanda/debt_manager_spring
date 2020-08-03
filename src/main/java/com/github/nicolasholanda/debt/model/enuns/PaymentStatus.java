@@ -7,7 +7,8 @@ public enum PaymentStatus {
 
     PAID(1, "Quitado"),
     PENDING(2, "Pendente"),
-    CANCELED(3, "Cancelado");
+    CANCELED(3, "Cancelado"),
+    IN_PROCESS(4, "Em processo");
 
     private Integer code;
     private String description;

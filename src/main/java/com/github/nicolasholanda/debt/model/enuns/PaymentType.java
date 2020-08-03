@@ -5,11 +5,18 @@ import static java.util.Arrays.stream;
 
 public enum PaymentType {
 
-    CASH(1, "Dinheiro"),
-    CREDIT(2, "Crédito");
+    CASH(Integer.parseInt(Constants.CASH_CODE), Constants.CASH_DESCRIPTION),
+    CREDIT(Integer.parseInt(Constants.CREDIT_CODE), Constants.CREDIT_DESCRIPTION);
 
     private Integer code;
     private String description;
+
+    public static class Constants {
+        public static final String CASH_CODE = "1";
+        public static final String CREDIT_CODE = "2";
+        public static final String CASH_DESCRIPTION = "Dinheiro";
+        public static final String CREDIT_DESCRIPTION = "Crédito";
+    }
 
     PaymentType(Integer code, String description) {
         this.code = code;

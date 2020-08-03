@@ -4,6 +4,7 @@ import com.github.nicolasholanda.debt.model.ApplicationUser;
 import com.github.nicolasholanda.debt.model.dto.DemandListItemDTO;
 import com.github.nicolasholanda.debt.model.dto.ExistentUserDTO;
 import com.github.nicolasholanda.debt.model.dto.NewUserDTO;
+import com.github.nicolasholanda.debt.model.mapper.DemandListItemMapper;
 import com.github.nicolasholanda.debt.service.ApplicationUserService;
 import com.github.nicolasholanda.debt.service.DemandService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,15 @@ import static org.springframework.http.ResponseEntity.noContent;
 @RequestMapping(path = "/usuarios")
 public class ApplicationUserController {
 
-    private ApplicationUserService service;
     private DemandService demandService;
+    private ApplicationUserService service;
+    private DemandListItemMapper demandListItemMapper;
 
     @Autowired
-    public ApplicationUserController(ApplicationUserService service, DemandService demandService) {
+    public ApplicationUserController(ApplicationUserService service, DemandService demandService, DemandListItemMapper demandListItemMapper) {
         this.service = service;
         this.demandService = demandService;
+        this.demandListItemMapper = demandListItemMapper;
     }
 
     @GetMapping
@@ -70,6 +73,6 @@ public class ApplicationUserController {
     public ResponseEntity<Page<DemandListItemDTO>> findOrders(@PathVariable(value = "id") Integer id,
                                                               @RequestParam(value = "page", defaultValue = "0") Integer page,
                                                               @RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage) {
-        return ok(demandService.findPaginatedToCustomer(page, linesPerPage, id));
+        return ok(demandService.findPaginatedToCustomer(page, linesPerPage, id).map(demandListItemMapper::toDTO));
     }
 }

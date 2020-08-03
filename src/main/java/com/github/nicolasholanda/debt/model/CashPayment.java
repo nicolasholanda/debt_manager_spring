@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "cash_payment")
-@JsonTypeName("1")
+@JsonTypeName(PaymentType.Constants.CASH_CODE)
 public class CashPayment extends Payment {
 
     public CashPayment() {}

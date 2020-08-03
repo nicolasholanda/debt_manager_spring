@@ -3,6 +3,7 @@ package com.github.nicolasholanda.debt.model;
 import com.github.nicolasholanda.debt.model.enuns.DemandStatus;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -37,6 +38,9 @@ public class Demand extends BaseEntity<Integer> {
     private Set<DemandItem> items = emptySet();
 
     private Integer status;
+
+    @Transient
+    private BigDecimal totalPrice;
 
     public Demand(){}
 
@@ -119,5 +123,11 @@ public class Demand extends BaseEntity<Integer> {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public BigDecimal getTotalPrice() {
+        return totalPrice != null ?
+                totalPrice :
+                items.stream().map(DemandItem::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }
