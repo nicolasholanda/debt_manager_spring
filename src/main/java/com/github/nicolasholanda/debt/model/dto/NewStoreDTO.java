@@ -25,6 +25,9 @@ public class NewStoreDTO implements Serializable {
     @NotNull(message = "{store.brands.notnull}")
     private List<Brand> brands;
 
+    public NewStoreDTO(){
+    }
+
     public NewStoreDTO(Integer owner, String name, Integer addressId, List<Brand> brands) {
         this.name = name;
         this.ownerId = owner;

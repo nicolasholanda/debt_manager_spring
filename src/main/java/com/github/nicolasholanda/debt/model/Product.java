@@ -112,6 +112,7 @@ public class Product extends BaseEntity<Integer> {
     }
 
     public void setGender(Integer gender) {
+        Gender.of(gender);
         this.gender = gender;
     }
 

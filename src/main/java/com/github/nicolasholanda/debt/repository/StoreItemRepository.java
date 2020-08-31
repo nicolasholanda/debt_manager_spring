@@ -31,4 +31,10 @@ public interface StoreItemRepository extends JpaRepository<StoreItem, Integer> {
                                 @Param("genders") List<Integer> genders,
                                 @Param("categories") List<Integer> categories,
                                 Pageable pageable);
+
+    @Query(value = "SELECT si FROM StoreItem si " +
+                    "WHERE si.id.product.id = :productId " +
+                    "AND si.id.store.id = :storeId")
+    StoreItem findByStoreAndProduct(@Param("storeId") Integer storeId,
+                                    @Param("productId") Integer productId);
 }

@@ -5,12 +5,14 @@ import com.github.nicolasholanda.debt.model.dto.DemandListItemDTO;
 import com.github.nicolasholanda.debt.model.dto.ExistentUserDTO;
 import com.github.nicolasholanda.debt.model.dto.NewUserDTO;
 import com.github.nicolasholanda.debt.model.mapper.DemandListItemMapper;
+import com.github.nicolasholanda.debt.model.validation.UpdateModel;
 import com.github.nicolasholanda.debt.service.ApplicationUserService;
 import com.github.nicolasholanda.debt.service.DemandService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +23,7 @@ import static java.lang.String.format;
 import static org.springframework.http.ResponseEntity.*;
 import static org.springframework.http.ResponseEntity.noContent;
 
+@Validated
 @Controller
 @RequestMapping(path = "/usuarios")
 public class ApplicationUserController {
@@ -59,12 +62,10 @@ public class ApplicationUserController {
         return created(URI.create(format("/usuarios/%s", service.save(userDTO).getId()))).build();
     }
 
+    @UpdateModel
     @PutMapping(path = "/{id}")
     public ResponseEntity<ApplicationUser> update(@PathVariable(value = "id") Integer id,
-                                                  @Valid @RequestBody ExistentUserDTO userDTO) {
-        if(!userDTO.getId().equals(id)) {
-            throw new IllegalArgumentException("O id enviado não corresponde ao id do usuário.");
-        }
+                                                  @RequestBody ExistentUserDTO userDTO) {
         service.update(userDTO);
         return noContent().build();
     }

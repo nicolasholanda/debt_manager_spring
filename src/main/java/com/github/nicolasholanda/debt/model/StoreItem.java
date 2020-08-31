@@ -40,6 +40,7 @@ public class StoreItem implements Serializable {
         return id.getProduct();
     }
 
+    @JsonIgnore
     public Store getStore() {
         return id.getStore();
     }

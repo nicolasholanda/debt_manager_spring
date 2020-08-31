@@ -1,6 +1,7 @@
 package com.github.nicolasholanda.debt.service;
 
 import com.github.nicolasholanda.debt.model.Product;
+import com.github.nicolasholanda.debt.model.StoreItem;
 import com.github.nicolasholanda.debt.model.dto.ProductListItemDTO;
 import com.github.nicolasholanda.debt.model.mapper.ProductListItemMapper;
 import com.github.nicolasholanda.debt.repository.ProductRepository;
@@ -45,5 +46,9 @@ public class ProductService {
 
     public Product save(Product product) {
         return repository.save(product);
+    }
+
+    public StoreItem findBy(Integer storeId, Integer productId) {
+        return storeItemRepository.findByStoreAndProduct(storeId, productId);
     }
 }

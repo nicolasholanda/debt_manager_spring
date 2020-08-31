@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.stream.Collectors;
 
 import static com.github.nicolasholanda.debt.model.enuns.UserType.CUSTOMER;
+import static java.lang.String.format;
 
 @Mapper(componentModel = "spring")
 public abstract class NewDemandMapper {
@@ -40,6 +41,13 @@ public abstract class NewDemandMapper {
         var customer = applicationUserService.findById(dto.getCustomerId());
         var items = dto.getItems().stream().map(i -> {
             var product = productService.findById(i.getProductId());
+            var storeItem = productService.findBy(store.getId(), product.getId());
+            if(storeItem == null) {
+                throw new IllegalArgumentException(format("A loja não vende o produto de id %d", i.getProductId()));
+            } else if(storeItem.getQuantity() < i.getQuantity()) {
+                throw new IllegalArgumentException(format("A loja possui apenas %d unidades do produto de id %d.",
+                        storeItem.getQuantity(), i.getProductId()));
+            }
             return new DemandItem(product, demand, i.getQuantity(), i.getDiscount());
         }).collect(Collectors.toSet());
         if(!customer.getUserType().equals(CUSTOMER)) {

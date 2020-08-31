@@ -57,7 +57,8 @@ public class CategoryService {
     }
 
     public void delete(Integer id) {
-        Try.run(() -> repository.delete(findById(id))).getOrElseThrow(() -> {
+        var category = findById(id);
+        Try.run(() -> repository.delete(category)).getOrElseThrow(() -> {
             throw new DataIntegrityViolationException("Não é possível remover uma categoria que possui produtos.");
         });
     }

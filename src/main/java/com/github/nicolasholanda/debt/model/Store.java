@@ -15,6 +15,7 @@ import static javax.persistence.CascadeType.ALL;
 @Table(name = "store")
 public class Store extends BaseEntity<Integer> {
 
+    @JsonIgnore
     @OneToOne(cascade = ALL)
     @JoinColumn(name = "owner_id")
     private Seller owner;

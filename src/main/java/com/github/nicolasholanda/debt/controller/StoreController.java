@@ -64,7 +64,7 @@ public class StoreController {
                                                                           @RequestParam(value = "lines", defaultValue = "10") Integer linesPerPage,
                                                                           @RequestParam(value = "brands", defaultValue = "") String brands,
                                                                           @RequestParam(value = "price", defaultValue = "9999") BigDecimal maxPrice,
-                                                                          @RequestParam(value = "store") Integer storeId,
+                                                                          @PathVariable(value = "id") Integer storeId,
                                                                           @RequestParam(value = "genders", defaultValue = "1,2,3") String genders,
                                                                           @RequestParam(value = "categories", defaultValue = "") String categories) {
         var brandList = brands.isEmpty() ? new ArrayList<Integer>() :
